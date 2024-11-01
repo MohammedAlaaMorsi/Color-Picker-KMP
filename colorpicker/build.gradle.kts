@@ -1,10 +1,14 @@
+
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
+
 }
+
 
 kotlin {
     jvmToolchain(11)
@@ -51,6 +55,8 @@ kotlin {
 
 
     }
+
+
 }
 
 android {

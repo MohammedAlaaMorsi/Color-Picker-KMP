@@ -7,6 +7,7 @@ androidx-activityCompose = "1.9.3"
 androidx-appcompat = "1.7.0"
 androidx-uiTest = "1.7.5"
 compose-uitooling = "1.7.5"
+maven-publish = "0.30.0"
 [libraries]
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -22,4 +23,6 @@ cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotli
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+
 
