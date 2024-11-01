@@ -48,14 +48,14 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.mohammedalaamorsi.app"
+    namespace = "io.github.mohammedalaamorsi.app"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 21
         targetSdk = 35
 
-        applicationId = "com.github.mohammedalaamorsi.app.androidApp"
+        applicationId = "io.github.mohammedalaamorsi.app.androidApp"
         versionCode = 1
         versionName = "1.0.0"
 
@@ -75,7 +75,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageVersion = "1.0.0"
-            packageName = "ColorPickerKMP.sample.composeApp"
+            packageName = "ColorPickerCMP.sample.composeApp"
         }
     }
 }

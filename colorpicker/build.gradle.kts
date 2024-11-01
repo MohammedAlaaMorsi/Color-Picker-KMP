@@ -54,7 +54,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.github.mohammedalaamorsi.colorpicker"
+    namespace = "io.github.mohammedalaamorsi.colorpicker"
     compileSdk = 34
 
     defaultConfig {

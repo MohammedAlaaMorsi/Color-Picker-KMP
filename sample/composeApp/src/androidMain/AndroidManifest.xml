@@ -6,7 +6,7 @@
         android:label="RangeSeekBarKMP"
         android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
-            android:name="com.github.mohammedalaamorsi.app.AppActivity"
+            android:name="io.github.mohammedalaamorsi.app.AppActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan"
