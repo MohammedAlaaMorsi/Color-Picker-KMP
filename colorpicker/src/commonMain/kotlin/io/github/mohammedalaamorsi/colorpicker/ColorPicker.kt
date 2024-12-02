@@ -47,7 +47,10 @@ sealed class ColorPickerType {
     /**
      * @param showAlphaBar Sets the visibility of the alpha bar.
      */
-    class Classic(val showAlphaBar: Boolean = true) : ColorPickerType()
+    class Classic(
+        val showAlphaBar: Boolean = true,
+        val initialColor: Color = Color.Red
+    ) : ColorPickerType()
 
     /**
      * @param showBrightnessBar Sets the visibility of the brightness bar.
@@ -58,6 +61,7 @@ sealed class ColorPickerType {
         val showBrightnessBar: Boolean = true,
         val showAlphaBar: Boolean = true,
         val lightCenter: Boolean = true,
+        val initialColor: Color = Color.Red
     ) : ColorPickerType()
 
     /**
@@ -75,6 +79,7 @@ sealed class ColorPickerType {
         val showDarknessBar: Boolean = true,
         val showAlphaBar: Boolean = true,
         val showColorPreview: Boolean = true,
+        val initialColor: Color = Color.Red
     ) : ColorPickerType()
 
     /**
@@ -86,6 +91,7 @@ sealed class ColorPickerType {
         val colorWidth: Dp = 20.dp,
         val tracksCount: Int = 5,
         val sectorsCount: Int = 24,
+        val initialColor: Color = Color.Red
     ) : ColorPickerType()
 }
 
@@ -104,6 +110,7 @@ fun ColorPicker(
         when (type) {
             is ColorPickerType.Classic -> ClassicColorPicker(
                 showAlphaBar = type.showAlphaBar,
+                initialColor = type.initialColor,
                 onPickedColor = onPickedColor,
             )
 
@@ -111,8 +118,10 @@ fun ColorPicker(
                 showAlphaBar = type.showAlphaBar,
                 showBrightnessBar = type.showBrightnessBar,
                 lightCenter = type.lightCenter,
+                initialColor = type.initialColor,
                 onPickedColor = onPickedColor,
-            )
+
+                )
 
             is ColorPickerType.Ring -> RingColorPicker(
                 ringWidth = type.ringWidth,
@@ -121,6 +130,7 @@ fun ColorPicker(
                 showDarkColorBar = type.showDarknessBar,
                 showAlphaBar = type.showAlphaBar,
                 showColorPreview = type.showColorPreview,
+                initialColor = type.initialColor,
                 onPickedColor = onPickedColor
             )
 
@@ -128,6 +138,7 @@ fun ColorPicker(
                 colorWidth = type.colorWidth,
                 tracksCount = type.tracksCount,
                 sectorsCount = type.sectorsCount,
+                initialColor = type.initialColor,
                 onPickedColor = onPickedColor
             )
         }

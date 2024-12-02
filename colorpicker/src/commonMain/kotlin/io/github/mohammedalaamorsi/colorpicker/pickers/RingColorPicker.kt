@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -23,10 +24,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.mohammedalaamorsi.colorpicker.data.ColorRange
 import io.github.mohammedalaamorsi.colorpicker.data.Colors.gradientColors
 import io.github.mohammedalaamorsi.colorpicker.ext.blue
+import io.github.mohammedalaamorsi.colorpicker.ext.colorToHSV
 import io.github.mohammedalaamorsi.colorpicker.ext.darken
 import io.github.mohammedalaamorsi.colorpicker.ext.drawColorSelector
 import io.github.mohammedalaamorsi.colorpicker.ext.green
@@ -34,11 +37,16 @@ import io.github.mohammedalaamorsi.colorpicker.ext.lighten
 import io.github.mohammedalaamorsi.colorpicker.ext.red
 import io.github.mohammedalaamorsi.colorpicker.helper.BoundedPointStrategy
 import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper
+import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper.darkness
+import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper.lightness
+import io.github.mohammedalaamorsi.colorpicker.helper.MathHelper
 import io.github.mohammedalaamorsi.colorpicker.helper.MathHelper.getBoundedPointWithInRadius
 import io.github.mohammedalaamorsi.colorpicker.helper.MathHelper.getLength
 import kotlin.math.PI
 import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 @ExperimentalComposeUiApi
 @Composable
@@ -50,6 +58,7 @@ internal fun RingColorPicker(
     showDarkColorBar: Boolean,
     showAlphaBar: Boolean,
     showColorPreview: Boolean,
+    initialColor: Color = Color.Red,
     onPickedColor: (Color) -> Unit,
 ) {
     val density = LocalDensity.current
@@ -74,25 +83,37 @@ internal fun RingColorPicker(
         )
     }
     var selectedColor by remember {
-        mutableStateOf(Color.Red)
+        mutableStateOf(initialColor)
     }
     var color by remember {
-        mutableStateOf(Color.Red)
+        mutableStateOf(initialColor)
     }
     var lightColor by remember {
-        mutableStateOf(Color.Red)
+        mutableStateOf(initialColor)
     }
     var darkColor by remember {
-        mutableStateOf(Color.Red)
+        mutableStateOf(initialColor)
     }
     var lightness by remember {
-        mutableStateOf(0f)
+        mutableStateOf(initialColor.lightness())
     }
     var darkness by remember {
-        mutableStateOf(0f)
+        mutableStateOf(initialColor.darkness())
     }
     var alpha by remember {
-        mutableStateOf(1f)
+        mutableStateOf(initialColor.alpha)
+    }
+
+    LaunchedEffect(initialColor, radius) {
+        if (radius > 0) {
+            val hsv=colorToHSV(initialColor)
+            val angle = MathHelper.toRadians(hsv[0].toDouble())
+            val saturation = hsv[1]
+
+            val x = radius + cos(angle) * saturation * radius
+            val y = radius + sin(angle) * saturation * radius
+            pickerLocation = Offset(x.toFloat(), y.toFloat())
+        }
     }
     LaunchedEffect(selectedColor, lightness, darkness, alpha) {
         var red = selectedColor.red().lighten(lightness)
@@ -191,20 +212,20 @@ internal fun RingColorPicker(
                 colors = listOf(
                     Color.White,
                     selectedColor
-                )
+                ),initialColor=initialColor
             ) {
                 lightness = 1 - it
             }
         }
         if (showDarkColorBar) {
             Spacer(modifier = Modifier.height(16.dp))
-            ColorSlideBar(colors = listOf(Color.Black, lightColor)) {
+            ColorSlideBar(colors = listOf(Color.Black, lightColor),initialColor=initialColor) {
                 darkness = 1 - it
             }
         }
         if (showAlphaBar) {
             Spacer(modifier = Modifier.height(16.dp))
-            ColorSlideBar(colors = listOf(Color.Transparent, darkColor)) {
+            ColorSlideBar(colors = listOf(Color.Transparent, darkColor),initialColor=initialColor) {
                 alpha = it
             }
         }

@@ -64,6 +64,29 @@ fun Color.toHex(hexPrefix: Boolean = false, includeAlpha: Boolean = true): Strin
     }
 }
 
+fun colorToHSV(color: Color): FloatArray {
+    val r = color.red
+    val g = color.green
+    val b = color.blue
+
+    val max = maxOf(r, g, b)
+    val min = minOf(r, g, b)
+    val delta = max - min
+
+    val h = when {
+        delta == 0f -> 0f
+        max == r -> ((g - b) / delta) % 6
+        max == g -> ((b - r) / delta) + 2
+        else -> ((r - g) / delta) + 4
+    } * 60
+
+    val hue = if (h < 0) h + 360 else h
+    val saturation = if (max == 0f) 0f else delta / max
+    val brightness = max
+
+    return floatArrayOf(hue, saturation, brightness)
+}
+
 private fun Int.toHex(): String {
     return this.toString(16).let {
         if (it.length == 1) {

@@ -2,9 +2,21 @@ package io.github.mohammedalaamorsi.colorpicker.pickers
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +36,7 @@ import io.github.mohammedalaamorsi.colorpicker.ext.green
 import io.github.mohammedalaamorsi.colorpicker.ext.lighten
 import io.github.mohammedalaamorsi.colorpicker.ext.red
 import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper
+import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper.calculateInitialPickerLocation
 import kotlin.math.roundToInt
 
 @ExperimentalComposeUiApi
@@ -31,41 +44,53 @@ import kotlin.math.roundToInt
 internal fun ClassicColorPicker(
     modifier: Modifier = Modifier,
     showAlphaBar: Boolean,
+    initialColor: Color = Color.Red,
     onPickedColor: (Color) -> Unit
 ) {
     var pickerLocation by remember {
         mutableStateOf(Offset.Zero)
     }
     var colorPickerSize by remember {
-        mutableStateOf(IntSize(1,1))
+        mutableStateOf(IntSize(1, 1))
     }
     var alpha by remember {
-        mutableStateOf(1f)
+        mutableStateOf(initialColor.alpha)
     }
     var rangeColor by remember {
-        mutableStateOf(Color.White)
+        mutableStateOf(initialColor)
     }
     var color by remember {
-        mutableStateOf(Color.White)
+        mutableStateOf(initialColor)
+    }
+    LaunchedEffect(colorPickerSize, initialColor) {
+        if (colorPickerSize.width > 1 && colorPickerSize.height > 1) {
+            pickerLocation = calculateInitialPickerLocation(
+                initialColor,
+                colorPickerSize,
+                rangeColor
+            )
+        }
     }
     LaunchedEffect(rangeColor, pickerLocation, colorPickerSize, alpha) {
-        val xProgress = 1- (pickerLocation.x / colorPickerSize.width)
-        val yProgress = pickerLocation.y / colorPickerSize.height
-        color = Color(
-            rangeColor
-                .red()
-                .lighten(xProgress)
-                .darken(yProgress),
-            rangeColor
-                .green()
-                .lighten(xProgress)
-                .darken(yProgress),
-            rangeColor
-                .blue()
-                .lighten(xProgress)
-                .darken(yProgress),
-            alpha = (255 * alpha).roundToInt()
-        )
+        val xProgress = (1f - (pickerLocation.x / colorPickerSize.width)).coerceIn(0f, 1f)
+        val yProgress = (pickerLocation.y / colorPickerSize.height).coerceIn(0f, 1f)
+        if(xProgress.isNaN().not()&&yProgress.isNaN().not()){
+            color = Color(
+                rangeColor
+                    .red()
+                    .lighten(xProgress)
+                    .darken(yProgress),
+                rangeColor
+                    .green()
+                    .lighten(xProgress)
+                    .darken(yProgress),
+                rangeColor
+                    .blue()
+                    .lighten(xProgress)
+                    .darken(yProgress),
+                alpha = (255 * alpha).roundToInt()
+            )
+        }
     }
     LaunchedEffect(color) {
         onPickedColor(color)
@@ -97,7 +122,7 @@ internal fun ClassicColorPicker(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        ColorSlideBar(colors = gradientColors) {
+        ColorSlideBar(colors = gradientColors, initialColor = initialColor) {
             val (rangeProgress, range) = ColorPickerHelper.calculateRangeProgress(it.toDouble())
             val red: Int
             val green: Int
@@ -108,26 +133,31 @@ internal fun ClassicColorPicker(
                     green = (255 * rangeProgress).roundToInt()
                     blue = 0
                 }
+
                 ColorRange.YellowToGreen -> {
                     red = (255 * (1 - rangeProgress)).roundToInt()
                     green = 255
                     blue = 0
                 }
+
                 ColorRange.GreenToCyan -> {
                     red = 0
                     green = 255
                     blue = (255 * rangeProgress).roundToInt()
                 }
+
                 ColorRange.CyanToBlue -> {
                     red = 0
                     green = (255 * (1 - rangeProgress)).roundToInt()
                     blue = 255
                 }
+
                 ColorRange.BlueToPurple -> {
                     red = (255 * rangeProgress).roundToInt()
                     green = 0
                     blue = 255
                 }
+
                 ColorRange.PurpleToRed -> {
                     red = 255
                     green = 0
@@ -138,9 +168,11 @@ internal fun ClassicColorPicker(
         }
         if (showAlphaBar) {
             Spacer(modifier = Modifier.height(16.dp))
-            ColorSlideBar(colors = listOf(Color.Transparent, rangeColor)) {
+            ColorSlideBar(colors = listOf(Color.Transparent, rangeColor),initialColor=initialColor) {
                 alpha = it
             }
         }
     }
+
+
 }

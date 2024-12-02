@@ -23,15 +23,14 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.github.mohammedalaamorsi.colorpicker.ext.drawTransparentBackground
+import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper.calculateInitialProgress
 
 private const val thumbRadius = 20f
 
 @ExperimentalComposeUiApi
 @Composable
-internal fun ColorSlideBar(colors: List<Color>, onProgress: (Float) -> Unit) {
-    var progress by remember {
-        mutableStateOf(1f)
-    }
+internal fun ColorSlideBar(colors: List<Color>, initialColor: Color, onProgress: (Float) -> Unit) {
+    var progress by remember { mutableStateOf(calculateInitialProgress(initialColor, colors)) }
     var slideBarSize by remember {
         mutableStateOf(IntSize.Zero)
     }
@@ -47,7 +46,6 @@ internal fun ColorSlideBar(colors: List<Color>, onProgress: (Float) -> Unit) {
             }
             .pointerInput(Unit) {
                 detectDragGestures { change, _ ->
-                    // Calculate progress based on the x-position of the pointer
                     val xPosition = change.position.x.coerceIn(0f, slideBarSize.width.toFloat())
                     progress = (xPosition / slideBarSize.width).coerceIn(0f, 1f)
                 }
@@ -56,7 +54,6 @@ internal fun ColorSlideBar(colors: List<Color>, onProgress: (Float) -> Unit) {
             .border(0.2.dp, Color.LightGray, RoundedCornerShape(100))
     ) {
         drawTransparentBackground(3)
-        // Draw the slider track
         drawRect(
             brush = Brush.horizontalGradient(
                 colors = colors,
@@ -65,7 +62,6 @@ internal fun ColorSlideBar(colors: List<Color>, onProgress: (Float) -> Unit) {
             )
         )
 
-        // Draw the thumb circle
         val thumbCenterX = thumbRadius + ((size.width - thumbRadius * 2) * progress)
         drawCircle(
             color = Color.White,

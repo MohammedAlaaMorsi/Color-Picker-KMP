@@ -48,7 +48,7 @@ internal fun App()  {
             mutableStateOf(Color.Red)
         }
         var colorPickerType by remember {
-            mutableStateOf<ColorPickerType>(ColorPickerType.Classic())
+            mutableStateOf<ColorPickerType>(ColorPickerType.Classic(initialColor = Color.Green))
         }
         var showDialog by remember {
             mutableStateOf(false)
@@ -115,28 +115,28 @@ internal fun App()  {
             content = {
                 item {
                     OutlinedButton(onClick = {
-                        colorPickerType = ColorPickerType.Classic()
+                        colorPickerType = ColorPickerType.Classic(initialColor = Color.Green)
                     }, shape = RoundedCornerShape(50)) {
                         Text(text = "Classic")
                     }
                 }
                 item {
                     OutlinedButton(onClick = {
-                        colorPickerType = ColorPickerType.Circle()
+                        colorPickerType = ColorPickerType.Circle(initialColor = Color.Green)
                     }, shape = RoundedCornerShape(50)) {
                         Text(text = "Circle")
                     }
                 }
                 item {
                     OutlinedButton(onClick = {
-                        colorPickerType = ColorPickerType.Ring()
+                        colorPickerType = ColorPickerType.Ring(initialColor = Color.Green)
                     }, shape = RoundedCornerShape(50)) {
                         Text(text = "Ring")
                     }
                 }
                 item {
                     OutlinedButton(onClick = {
-                        colorPickerType = ColorPickerType.SimpleRing()
+                        colorPickerType = ColorPickerType.SimpleRing(initialColor = Color.Green)
                     }, shape = RoundedCornerShape(50)) {
                         Text(text = "Simple Ring")
                     }

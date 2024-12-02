@@ -8,7 +8,7 @@
 # Download
 
 ```groovy
-implementation 'io.github.mohammedalaamorsi.colorpicker:colorpicker-runtime:1.0.0'
+implementation 'io.github.mohammedalaamorsi:colorpicker:1.0.1'
 ```
 # Usage
 

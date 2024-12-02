@@ -1,6 +1,7 @@
 package io.github.mohammedalaamorsi.colorpicker.helper
 
 import androidx.compose.ui.geometry.Offset
+import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -34,5 +35,10 @@ internal object MathHelper {
             Offset(x, y)
         }
     }
+
+    fun toRadians(degrees: Double): Double {
+        return degrees * (PI / 180)
+    }
+
 
 }

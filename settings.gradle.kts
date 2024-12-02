@@ -1,4 +1,4 @@
-rootProject.name = "ColorPickerKMP"
+rootProject.name = "ColorPickerCMP"
 
 pluginManagement {
     repositories {

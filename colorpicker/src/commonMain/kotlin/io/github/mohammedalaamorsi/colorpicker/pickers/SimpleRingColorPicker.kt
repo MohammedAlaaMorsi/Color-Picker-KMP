@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.mohammedalaamorsi.colorpicker.data.ColorRange
+import io.github.mohammedalaamorsi.colorpicker.ext.colorToHSV
 import io.github.mohammedalaamorsi.colorpicker.ext.darken
 import io.github.mohammedalaamorsi.colorpicker.helper.ColorPickerHelper
 import io.github.mohammedalaamorsi.colorpicker.helper.MathHelper
@@ -41,6 +42,7 @@ internal fun SimpleRingColorPicker(
     colorWidth: Dp,
     tracksCount: Int,
     sectorsCount: Int,
+    initialColor: Color = Color.Red,
     onPickedColor: (Color) -> Unit
 ) {
     val density = LocalDensity.current
@@ -55,6 +57,17 @@ internal fun SimpleRingColorPicker(
     }
     var radius by remember {
         mutableStateOf(0f)
+    }
+
+    LaunchedEffect(initialColor) {
+        val hsv = colorToHSV(initialColor)
+        val hueProgress = hsv[0] / 360f
+        val brightnessProgress = 1 - hsv[2]
+
+        pickerLocation = IntOffset(
+            (hueProgress * sectorsCount).roundToInt(),
+            (brightnessProgress * tracksCount).roundToInt()
+        )
     }
     LaunchedEffect(pickerLocation) {
         onPickedColor(
@@ -75,15 +88,12 @@ internal fun SimpleRingColorPicker(
                 val x = change.position.x
                 val y = change.position.y
 
-                // Length and offset calculations
                 val length = MathHelper.getLength(x, y, radius)
                 val offset = radius - colorWidthPx * tracksCount
                 val trackProgress = ((length - offset) / (radius - offset)).coerceIn(0f, 1f)
 
-                // Angle and progress calculations
                 val progress = (((atan2(y - radius, x - radius) * 180.0 / PI) + 360) % 360 / 360f)
 
-                // Calculate picker location with clamped values
                 pickerLocation = IntOffset(
                     (sectorsCount * progress).roundToInt().coerceIn(0, sectorsCount),
                     (tracksCount * (1 - trackProgress)).roundToInt().coerceIn(0, tracksCount - 1)

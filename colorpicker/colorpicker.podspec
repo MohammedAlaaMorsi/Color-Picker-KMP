@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'colorpicker'
-    spec.version                  = '1.0.0'
+    spec.version                  = '1.0.1'
     spec.homepage                 = 'empty'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
