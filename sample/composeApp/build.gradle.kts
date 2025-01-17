@@ -62,6 +62,13 @@ kotlin {
             }
         }
 
+        val iosMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(compose.ui)
+            }
+        }
+
         val jvmMain by getting {
             dependsOn(composeMain)
             dependencies {
