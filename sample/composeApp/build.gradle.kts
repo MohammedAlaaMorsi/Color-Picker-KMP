@@ -29,62 +29,60 @@ kotlin {
         browser()
         nodejs()
     }
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(project(":colorpicker"))
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+        val commonMain by getting {
+            dependencies {
+                // Move Compose dependencies out of commonMain
+                // since not all platforms support it
+                implementation(project(":colorpicker"))
+                implementation(compose.runtime)
+            }
         }
 
-        androidMain.dependencies {
-            implementation(compose.uiTooling)
-            implementation(libs.androidx.activityCompose)
+        // Create a new sourceset for compose-supporting platforms
+        val composeMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+            }
         }
 
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
+        val androidMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.activityCompose)
+                implementation(libs.compose.uitooling)
+                implementation(compose.ui)
+            }
         }
 
-        iosMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
+        val jvmMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(compose.desktop.common)
+                implementation(compose.ui)
+            }
         }
 
-        macosMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
+        val jsMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(compose.html.core)
+            }
         }
 
-        watchosMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-        }
-
-        tvosMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-        }
-
-        jsMain.dependencies {
-            implementation(compose.html.core)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-        }
     }
 }
 
 android {
     namespace = "io.github.mohammedalaamorsi.app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
@@ -98,18 +96,13 @@ android {
     }
 }
 
-dependencies {
-    androidTestImplementation(libs.androidx.uitest.junit4)
-    debugImplementation(libs.androidx.uitest.testManifest)
-}
-
 compose.desktop {
     application {
         mainClass = "MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.2"
             packageName = "ColorPickerCMP.sample.composeApp"
         }
     }

@@ -14,7 +14,6 @@ kotlin {
     jvmToolchain(11)
     androidTarget()
     jvm()
-
     // iOS
     iosX64()
     iosArm64()
@@ -45,55 +44,58 @@ kotlin {
         }
     }
 
+    applyDefaultHierarchyTemplate()
     sourceSets {
-        commonMain.dependencies {
-            implementation(compose.ui)
-            implementation(compose.foundation)
-            implementation(compose.runtime)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
+        val commonMain by getting {
+            dependencies {
+                // Move Compose dependencies out of commonMain
+                // since not all platforms support it
+                implementation(compose.runtime)
+            }
         }
 
-
-        androidMain.dependencies {
-            implementation(libs.androidx.appcompat)
-            implementation(libs.androidx.activityCompose)
-            implementation(libs.compose.uitooling)
+        // Create a new sourceset for compose-supporting platforms
+        val composeMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.components.resources)
+            }
         }
 
-
-        iosMain.dependencies {
+        val androidMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.activityCompose)
+                implementation(libs.compose.uitooling)
+                implementation(compose.ui)
+            }
         }
 
-        jvmMain.dependencies {
-
+        val jvmMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(compose.desktop.common)
+                implementation(compose.ui)
+            }
         }
 
-        macosMain.dependencies {
-
+        val jsMain by getting {
+            dependsOn(composeMain)
+            dependencies {
+                implementation(compose.html.core)
+            }
         }
 
-
-        watchosMain.dependencies {
-
-        }
-
-        tvosMain.dependencies {
-
-        }
-
-        jsMain.dependencies {
-
-        }
 
     }
-
-
 }
 
 android {
     namespace = "io.github.mohammedalaamorsi.colorpicker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
