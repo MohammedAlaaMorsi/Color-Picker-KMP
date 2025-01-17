@@ -11,19 +11,7 @@ kotlin {
     jvmToolchain(11)
     androidTarget ()
     jvm()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-        macosArm64(),
-        watchosX64(),
-        tvosArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+    iosX64()
     // JavaScript
     js {
         browser()
@@ -38,22 +26,17 @@ kotlin {
                 // since not all platforms support it
                 implementation(project(":colorpicker"))
                 implementation(compose.runtime)
-            }
-        }
-
-        // Create a new sourceset for compose-supporting platforms
-        val composeMain by creating {
-            dependsOn(commonMain)
-            dependencies {
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
+
             }
         }
 
+
         val androidMain by getting {
-            dependsOn(composeMain)
+            dependsOn(commonMain)
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activityCompose)
@@ -63,14 +46,14 @@ kotlin {
         }
 
         val iosMain by getting {
-            dependsOn(composeMain)
+            dependsOn(commonMain)
             dependencies {
                 implementation(compose.ui)
             }
         }
 
         val jvmMain by getting {
-            dependsOn(composeMain)
+            dependsOn(commonMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.ui)
@@ -78,7 +61,7 @@ kotlin {
         }
 
         val jsMain by getting {
-            dependsOn(composeMain)
+            dependsOn(commonMain)
             dependencies {
                 implementation(compose.html.core)
             }
@@ -86,6 +69,7 @@ kotlin {
 
     }
 }
+
 
 android {
     namespace = "io.github.mohammedalaamorsi.app"
@@ -97,7 +81,7 @@ android {
 
         applicationId = "io.github.mohammedalaamorsi.app.androidApp"
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

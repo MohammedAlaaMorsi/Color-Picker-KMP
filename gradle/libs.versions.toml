@@ -7,6 +7,7 @@ androidx-activityCompose = "1.10.0"
 androidx-appcompat = "1.7.0"
 compose-uitooling = "1.7.6"
 maven-publish = "0.30.0"
+uiAndroid = "1.7.6"
 [libraries]
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }

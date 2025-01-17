@@ -18,15 +18,8 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-
     // macOS
     macosArm64()
-
-    // watchOS
-    watchosX64()
-
-    // tvOS
-    tvosArm64()
 
     js {
         browser()
@@ -51,21 +44,14 @@ kotlin {
                 // Move Compose dependencies out of commonMain
                 // since not all platforms support it
                 implementation(compose.runtime)
-            }
-        }
-
-        // Create a new sourceset for compose-supporting platforms
-        val composeMain by creating {
-            dependsOn(commonMain)
-            dependencies {
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.components.resources)
             }
         }
 
+
         val androidMain by getting {
-            dependsOn(composeMain)
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activityCompose)
@@ -73,17 +59,24 @@ kotlin {
                 implementation(compose.ui)
             }
         }
-
+        val iosMain by getting {
+            dependsOn(commonMain)
+            dependencies {
+                implementation(compose.ui)
+            }
+        }
+        val macosMain by getting {
+            dependencies {
+                implementation(compose.ui)
+            }
+        }
         val jvmMain by getting {
-            dependsOn(composeMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.ui)
             }
         }
-
         val jsMain by getting {
-            dependsOn(composeMain)
             dependencies {
                 implementation(compose.html.core)
             }
