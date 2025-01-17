@@ -13,6 +13,7 @@ kotlin {
     // JVM and Android
     jvmToolchain(11)
     androidTarget()
+    jvm()
 
     // iOS
     iosX64()
@@ -28,9 +29,9 @@ kotlin {
     // tvOS
     tvosArm64()
 
-    // JavaScript
-    js(IR) {
-        binaries.executable()
+    js {
+        browser()
+        nodejs()
     }
 
     cocoapods {

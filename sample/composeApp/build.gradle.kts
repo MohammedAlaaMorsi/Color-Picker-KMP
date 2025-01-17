@@ -25,10 +25,10 @@ kotlin {
         }
     }
     // JavaScript
-    js(IR) {
-        binaries.executable()
+    js {
+        browser()
+        nodejs()
     }
-
 
     sourceSets {
         commonMain.dependencies {
