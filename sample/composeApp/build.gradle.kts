@@ -9,19 +9,26 @@ plugins {
 
 kotlin {
     jvmToolchain(11)
-    androidTarget {
-    }
+    androidTarget ()
     jvm()
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
+        macosArm64(),
+        watchosX64(),
+        tvosArm64()
     ).forEach {
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
         }
     }
+    // JavaScript
+    js(IR) {
+        binaries.executable()
+    }
+
 
     sourceSets {
         commonMain.dependencies {
@@ -41,9 +48,37 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
+
         iosMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
         }
 
+        macosMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+        }
+
+        watchosMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+        }
+
+        tvosMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+        }
+
+        jsMain.dependencies {
+            implementation(compose.html.core)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+        }
     }
 }
 

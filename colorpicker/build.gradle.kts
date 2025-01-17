@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose)
@@ -11,19 +10,31 @@ plugins {
 
 
 kotlin {
+    // JVM and Android
     jvmToolchain(11)
-    androidTarget {
+    androidTarget()
 
-    }
-
-    jvm()
-
+    // iOS
     iosX64()
     iosArm64()
     iosSimulatorArm64()
 
+    // macOS
+    macosArm64()
+
+    // watchOS
+    watchosX64()
+
+    // tvOS
+    tvosArm64()
+
+    // JavaScript
+    js(IR) {
+        binaries.executable()
+    }
+
     cocoapods {
-        version = "1.0.1"
+        version = "1.0.2"
         summary = "Compose application framework"
         homepage = "empty"
         ios.deploymentTarget = "11.0"
@@ -53,6 +64,26 @@ kotlin {
         iosMain.dependencies {
         }
 
+        jvmMain.dependencies {
+
+        }
+
+        macosMain.dependencies {
+
+        }
+
+
+        watchosMain.dependencies {
+
+        }
+
+        tvosMain.dependencies {
+
+        }
+
+        jsMain.dependencies {
+
+        }
 
     }
 
