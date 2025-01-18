@@ -12,11 +12,6 @@ kotlin {
     androidTarget ()
     jvm()
     iosX64()
-    // JavaScript
-    js {
-        browser()
-        nodejs()
-    }
     applyDefaultHierarchyTemplate()
 
     sourceSets {
@@ -36,7 +31,6 @@ kotlin {
 
 
         val androidMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activityCompose)
@@ -46,26 +40,18 @@ kotlin {
         }
 
         val iosMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation(compose.ui)
             }
         }
 
         val jvmMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation(compose.desktop.common)
                 implementation(compose.ui)
             }
         }
 
-        val jsMain by getting {
-            dependsOn(commonMain)
-            dependencies {
-                implementation(compose.html.core)
-            }
-        }
 
     }
 }
@@ -94,7 +80,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageVersion = "1.0.2"
-            packageName = "ColorPickerCMP.sample.composeApp"
+            packageName = "ColorPickerKMP.sample.composeApp"
         }
     }
 }

@@ -21,8 +21,12 @@ kotlin {
     // macOS
     macosArm64()
 
-    js {
-        browser()
+    js(IR) {
+        browser {
+            webpackTask {
+                mainOutputFileName = "colorpicker.js"
+            }
+        }
         nodejs()
     }
 
@@ -60,7 +64,6 @@ kotlin {
             }
         }
         val iosMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation(compose.ui)
             }

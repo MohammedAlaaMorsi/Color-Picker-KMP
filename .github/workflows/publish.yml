@@ -49,7 +49,7 @@ jobs:
         run: ./gradlew macosArm64MainKlibrary
 
       - name: Build JavaScript
-        run: ./gradlew jsBrowserProductionWebpack
+        run: ./gradlew jsNodeProductionExecutableCompileSync
 
       - name: Build JVM
         run: ./gradlew jvmJar
