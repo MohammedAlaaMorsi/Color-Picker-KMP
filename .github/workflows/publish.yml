@@ -48,12 +48,6 @@ jobs:
       - name: Build macOS
         run: ./gradlew macosArm64MainKlibrary
 
-      - name: Build watchOS
-        run: ./gradlew watchosX64MainKlibrary
-
-      - name: Build tvOS
-        run: ./gradlew tvosArm64MainKlibrary
-
       - name: Build JavaScript
         run: ./gradlew jsBrowserProductionWebpack
 
