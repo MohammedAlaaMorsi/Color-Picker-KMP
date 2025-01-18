@@ -22,12 +22,9 @@ kotlin {
     macosArm64()
 
     js(IR) {
-        browser {
-            webpackTask {
-                mainOutputFileName = "colorpicker.js"
-            }
+        nodejs {
+            binaries.executable() // Enables production executables for Node.js
         }
-        nodejs()
     }
 
     cocoapods {
@@ -81,13 +78,19 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
-                implementation(compose.html.core)
+                implementation(libs.kotlin.node)
             }
         }
 
 
     }
 }
+
+// Add this to your build.gradle.kts
+tasks.register("prepareJsBuild") {
+    dependsOn("colorpicker:jsPackageJson", "colorpicker:kotlinNodeJsSetup")
+}
+
 
 android {
     namespace = "io.github.mohammedalaamorsi.colorpicker"

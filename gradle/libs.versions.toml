@@ -6,6 +6,7 @@ agp = "8.8.0"
 androidx-activityCompose = "1.10.0"
 androidx-appcompat = "1.7.0"
 compose-uitooling = "1.7.6"
+kotlinNode = "18.16.12-pre.634"
 maven-publish = "0.30.0"
 uiAndroid = "1.7.6"
 [libraries]
@@ -13,6 +14,7 @@ uiAndroid = "1.7.6"
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
+kotlin-node = { module = "org.jetbrains.kotlin-wrappers:kotlin-node", version.ref = "kotlinNode" }
 [plugins]
 
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
