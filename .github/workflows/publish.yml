@@ -69,7 +69,7 @@ jobs:
       - name: Publish Library
         run: |
           echo "Publishing and Releasing library 🚀"
-          ./gradlew publish
+          ./gradlew publish --no-configuration-cache
           echo "Published and Released ✅"
         env:
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ github.event.inputs.versionName }}
